@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http:www.w3.org/1999/xhtml" xmlns:th="http:www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+	<!--
+		table {
+			border-collapse: collapse;
+		}
+		th, td {
+			border: 1px darkgray solid;
+		}
+		label {
+		display: inline-block;
+		width: 6em;
+		line-height: 180%;
+		}
+	-->
+	</style>
+</head>
+<body>
+
+	<form action="/employee/list" th:action="@{/employee/list}" th:object="${employee}">
+		<label for="firstName">First Name</label>
+		<input type="text" id="firstName" name="firstName" size="6" th:value="*{firstName}" />
+		<br />
+		<label for="lastName">Last Name</label>
+		<input type="text" id="lastName" name="lastName" size="6" th:value="*{lastName}" />
+		<br />
+		<label for="sex">Sex</label>
+		<select id="sex" name="sex">
+			<option th:selected="${employee.sex == ''}" />
+			<option th:each="sex : ${T(com.spring.data.jpa.example.repository.entity.Employee$Sex).values()}"
+						th:value="${sex}"
+						th:selected="${employee.sex == sex}"
+						th:text="${sex}" />
+		</select>
+		<br />
+		<label for="birthday">Birthday</label>
+		<input type="date" id="birthday" name="birthday" th:value="*{birthday}" />
+		<br />
+		<label for="mailAddress">Mail Address</label>
+		<input type="email" id="mailAddress" name="mailAddress" size="20" th:value="*{mailAddress}" />
+		<br />
+		<label for="department.code">Department</label>
+		<select id="department.code" name="department.code">
+			<option th:selected="${employee.department == null || employee.department.code == null}" />
+			<option th:each="department : ${departments}" th:value="${department.code}"
+						th:selected="${employee.department != null && employee.department.code == department.code}"
+						th:text="${department.name}" />
+		</select>
+		<br />
+		<input type="submit" value="search" />
+		<input type="submit" name="insertAction" value="insert" />
+	</form>
+
+	<br />
+
+	<form action="/employee/delete" th:action="@{/employee/delete}">
+		<table>
+			<thead>
+				<tr>
+					<th><input type="submit" value="delete" /></th>
+					<th>No</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Sex</th>
+					<th>Birthday</th>
+					<th>Mail Address</th>
+					<th>Department</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="employee : ${employees}">
+					<td><input type="checkbox" name="nos" th:value="${employee.no}" /></td>
+					<td><a th:href="@{/employee/edit(no=${employee.no})}"
+							th:text="${employee.no}"></a>
+					</td>
+					<td th:text="${employee.firstName}" />
+					<td th:text="${employee.lastName}" />
+					<td th:text="${employee.sex}" />
+					<td th:text="${employee.birthday}" />
+					<td th:text="${employee.mailAddress}" />
+					<td th:text="${employee.department.name}" />
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+	<!--
+	label {
+		display: inline-block;
+		width: 6em;
+		line-height: 180%;
+		}
+		.error {
+			border: solid 1px crimson;
+			color : crimson;
+			background-color: lavenderblush;
+			padding: 0.2em
+		}
+	-->
+	</style>
+	<body>
+		<form action="/employee/save" th:action="@{/employee/save}" th:object="${employee}">
+			<div th:each="e : ${#fields.detailedErrors()}"
+					th:text="${e.message}" th:class="error"></div>
+			<input type="hidden" name="no" th:value="*{no}" />
+			<input type="hidden" name="version" th:value="*{version}" />
+			<label for="firstName">First Name</label>
+			<input type="text" id="firstName" name="firstName" size="6" th:value="*{firstName}" />
+			<br />
+			<label for="lastName">Last Name</label>
+			<input type="text" id="lastName" name="lastName" size="6" th:value="*{lastName}" />
+			<br />
+			<label for="sex">Sex</label>
+			<select id="sex" name="sex">
+				<option th:selected="${employee.sex == ''}" />
+				<option th:each="sex : ${T(com.spring.data.jpa.example.repository.entity.Employee$Sex).values()}"
+							th:value="${sex}" th:selected="${employee.sex == sex}" th:text="${sex}" />
+			</select>
+			<br />
+			<label for="birthday">Birthday</label>
+			<input type="date" id="birthday" name="birthday" th:value="*{birthday}" />
+			<br />
+			<label for="mailAddress">Mail Address</label>
+			<input type="email" id="mailAddress" name="mailAddress" size="20" th:value="*{mailAddress}" />
+			<br />
+			<label for="department.code">Department</label>
+			<select id="department.code" name="department.code">
+				<option th:selected="${employee.department == null || employee.department.code == null}" />
+				<option th:each="department : ${departments}"
+							th:value="${department.code}"
+							th:selected="${employee.department != null && employee.department.code == department.code}"
+							th:text="${department.name}" />
+			</select>
+			<br />
+			<input type="submit" value="save" />
+			<input type="button" onclick="location.href='list'" value="back" />
+		</form>
+	</body>
+</head>
+</html>
