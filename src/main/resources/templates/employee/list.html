@@ -17,6 +17,24 @@
 		}
 	-->
 	</style>
+	<script type="text/javascript">
+	function deleteEmployees() {
+		var elements = document.querySelectorAll("input[type=checkbox]:checked");
+
+		for (var i = 0 ; i < elements.length ; i++) {
+			var rowElement = elements[i].parentNode.parentNode;
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.status == 204) {
+					rowElement.parentNode.removeChild(rowElement);
+				}
+			};
+			xhr.open("DELETE", "/employees/" + elements[i].value);
+			xhr.send();
+		}
+		return false;
+	}
+	</script>
 </head>
 <body>
 
@@ -56,7 +74,7 @@
 
 	<br />
 
-	<form action="/employee/delete" th:action="@{/employee/delete}">
+	<form action="#" onsubmit="return deleteEmployees()">
 		<table>
 			<thead>
 				<tr>
